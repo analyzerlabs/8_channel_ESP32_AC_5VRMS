@@ -8,7 +8,7 @@ BLECharacteristic * pTxCharacteristic;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 uint8_t txValue = 0;
-
+String dataRecieved;
 
 
 #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
@@ -33,9 +33,10 @@ class MyCallbacks: public BLECharacteristicCallbacks {
       if (rxValue.length() > 0) {
         Serial.println("*********");
         Serial.print("Received Value: ");
-        for (int i = 0; i < rxValue.length(); i++)
+        for (int i = 0; i < rxValue.length(); i++){
           Serial.print(rxValue[i]);
-
+          dataRecieved[i] = rxValue[i];
+        }
         Serial.println();
         Serial.println("*********");
       }
@@ -47,7 +48,7 @@ void setup() {
   Serial.begin(115200);
 
   // Create the BLE Device
-  BLEDevice::init("UART Service");
+  BLEDevice::init("8 CANALES");
 
   // Create the BLE Server
   pServer = BLEDevice::createServer();
