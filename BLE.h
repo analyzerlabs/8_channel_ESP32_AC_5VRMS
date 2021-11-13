@@ -2,15 +2,14 @@
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
-#include "Decode.h"
-
+#include "asd.h"
 BLEServer *pServer = NULL;
 BLECharacteristic * pTxCharacteristic;
 bool deviceConnected = false;
 bool oldDeviceConnected = false;
 uint8_t txValue = 0;
-String dataRecieved;
-
+char *dataDecoded;
+char *dataRecieved;
 
 
 #define SERVICE_UUID           "6E400001-B5A3-F393-E0A9-E50E24DCCA9E" // UART service UUID
@@ -31,14 +30,18 @@ class MyServerCallbacks: public BLEServerCallbacks {
 class MyCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic *pCharacteristic) {
       std::string rxValue = pCharacteristic->getValue();
-
+      char aux[30];
       if (rxValue.length() > 0) {
         Serial.println("*********");
         Serial.print("Received Value: ");
         for (int i = 0; i < rxValue.length(); i++){
           Serial.print(rxValue[i]);
-          dataRecieved[i] = rxValue[i];
+          aux[i]= rxValue[i];
+        
         }
+        dataRecieved = &aux[0];
+        dataDecoded = changeValues(dataRecieved);
+        
         Serial.println();
         Serial.println("*********");
       }
@@ -61,16 +64,16 @@ void setup() {
 
   // Create a BLE Characteristic
   pTxCharacteristic = pService->createCharacteristic(
-										CHARACTERISTIC_UUID_TX,
-										BLECharacteristic::PROPERTY_NOTIFY
-									);
+                    CHARACTERISTIC_UUID_TX,
+                    BLECharacteristic::PROPERTY_NOTIFY
+                  );
                       
   pTxCharacteristic->addDescriptor(new BLE2902());
 
   BLECharacteristic * pRxCharacteristic = pService->createCharacteristic(
-											 CHARACTERISTIC_UUID_RX,
-											BLECharacteristic::PROPERTY_WRITE
-										);
+                       CHARACTERISTIC_UUID_RX,
+                      BLECharacteristic::PROPERTY_WRITE
+                    );
 
   pRxCharacteristic->setCallbacks(new MyCallbacks());
 
@@ -88,8 +91,8 @@ void loop() {
         pTxCharacteristic->setValue(&txValue, 1);
         pTxCharacteristic->notify();
         txValue++;
-		delay(10); // bluetooth stack will go into congestion, if too many packets are sent
-	}
+    delay(10); // bluetooth stack will go into congestion, if too many packets are sent
+  }
 
     // disconnecting
     if (!deviceConnected && oldDeviceConnected) {
@@ -100,7 +103,7 @@ void loop() {
     }
     // connecting
     if (deviceConnected && !oldDeviceConnected) {
-		// do stuff here on connecting
+    // do stuff here on connecting
         oldDeviceConnected = deviceConnected;
     }
 }
