@@ -1,41 +1,50 @@
 char *changeValues(char *p){
     char *r;
-
-    if(&p[0] == "L" && &p[1]== "C"){
+    Serial.println("llama a funcion");
+    if(p[0] == 'L' && p[1]== 'C'){
         //MODO LC0
-        if(&p[2]=="0"){
+        if(p[2]=='0'){
+            Serial.println("entra a 0");
             for(int i=0;i<16;i=i+2){                   //evalua la trama para el modo LC0
-                if(&p[4+i] =="," && &p[5+i]>= "A" && &p[5+i]<="K" ){}
-                else {return r;} 
+                if(p[4+i] ==',' && p[5+i]>= 'A' && p[5+i]<='K' ){}
+                else {
+                  return p;
+                } 
             }
             for(int i=0;i<8;i++) r[i]= p[5+2*i];    //Guarda los valores del modo LC0
+            return r;
         }
         //Modo LC1
-        else if(&p[2]=="1"){
-            if(&p[4] =="," && &p[5]>= "A" && &p[5]<="K" ){
+        else if(p[2]=='1'){
+          Serial.println("entra a 1");
+            if(p[4] ==',' && p[5]>= 'A' && p[5]<='K' ){
                 for(int i=0;i<8;i++)r[i]= p[5];   //Guarda el valor recibido en todos los canales
             } 
         }
 
         //MODO 8LC2
-        else if(&p[2]=="2"){
-            if(&p[4] =="," && (&p[5]== "S" || &p[5]=="R") ){
-                if(&p[5]=="S"){
+        else if(p[2]=='2'){
+            Serial.println("entra a 2");
+            if(p[4] ==',' && (p[5]== 'S' || p[5]=='R') ){
+                if(p[5]=='S'){
                     for(int i=0;i<4;i++){ 
-                        r[i] = "K";  
+                        r[i] = 'K';  
                     }
                     for(int i=4;i<8;i++){
-                         r[i] = "A"; 
+                         r[i] = 'A'; 
                     }
 
                 }
             }
-            else {
-                return r;
-            }
+            
         }
+        else {
+              return r;
+              Serial.println("salio sin cambiar");
+         }
     return r;
-    }
+  }
+  return p;
 }
 void mode(int c){
 

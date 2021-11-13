@@ -2,7 +2,7 @@
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
-#include "asd.h"
+#include "Decode.h"
 BLEServer *pServer = NULL;
 BLECharacteristic * pTxCharacteristic;
 bool deviceConnected = false;
@@ -41,8 +41,8 @@ class MyCallbacks: public BLECharacteristicCallbacks {
         }
         dataRecieved = &aux[0];
         dataDecoded = changeValues(dataRecieved);
-        
-        Serial.println();
+        Serial.print("\tData Decoded: ");
+        Serial.println(dataDecoded);
         Serial.println("*********");
       }
     }
