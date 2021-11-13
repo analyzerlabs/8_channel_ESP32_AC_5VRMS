@@ -6,7 +6,11 @@ char *changeValues(char *p){
         if(p[2]=='0'){
             Serial.println("entra a 0");
             for(int i=0;i<16;i=i+2){                   //evalua la trama para el modo LC0
-                if(p[4+i] ==',' && p[5+i]>= 'A' && p[5+i]<='K' ){}
+                if(p[3+i] ==',' && p[4+i]>= 'A' && p[4+i]<='K' ){
+                    Serial.print("Dato ");
+                    Serial.print((p[3+i]);
+                    Serial.println(" : Comparado");
+                  }
                 else {
                   return p;
                 } 
@@ -17,7 +21,7 @@ char *changeValues(char *p){
         //Modo LC1
         else if(p[2]=='1'){
           Serial.println("entra a 1");
-            if(p[4] ==',' && p[5]>= 'A' && p[5]<='K' ){
+            if(p[3] ==',' && p[4]>= 'A' && p[4]<='K' ){
                 for(int i=0;i<8;i++)r[i]= p[5];   //Guarda el valor recibido en todos los canales
             } 
         }
