@@ -1,9 +1,8 @@
 void demo(){
     int v_demo[8]={5,5,5,5,5,5,5,5};
     setPot(v_demo);
-    
-
 }
+/*
 Secuencia Demo
 Presiona botón y hace esta secuencia:
 Todo On - 1seg
@@ -24,8 +23,8 @@ Roller up -500ms
 Roller down - 500ms
 (finaliza y vuelve a hacerlo en bucle)
 Al presionar otra vez el botón se detiene y se apagan todos los blinds
-
-void setPot(int v[]){ 
+*/
+void setPot(int[] v){ 
   for(int i =0; i<4;i++){
     digitalWrite(15, LOW);
     SPI.transfer(i);

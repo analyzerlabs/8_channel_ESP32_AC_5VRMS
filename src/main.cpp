@@ -1,10 +1,13 @@
+#include <Arduino.h>
 #include <BLEDevice.h>
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
-#include "asd.h"
+#include "Decode.h"
+#include "Demo.h"
 #include "variables.h"
 #include <SPI.h>
+
 BLEServer *pServer = NULL;
 BLECharacteristic * pTxCharacteristic;
 bool deviceConnected = false;
