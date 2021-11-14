@@ -1,3 +1,4 @@
+int voltage[8] = {0,0,0,0,0,0,0,0}; 
 char *changeValues(char *p){
     char *r;
     Serial.println("llama a funcion");
@@ -8,14 +9,22 @@ char *changeValues(char *p){
             for(int i=0;i<16;i=i+2){                   //evalua la trama para el modo LC0
                 if(p[3+i] ==',' && p[4+i]>= 'A' && p[4+i]<='K' ){
                     Serial.print("Dato ");
-                    Serial.print((p[3+i]);
+                    Serial.print(&p[4+i]);
                     Serial.println(" : Comparado");
                   }
                 else {
                   return p;
                 } 
             }
-            for(int i=0;i<8;i++) r[i]= p[5+2*i];    //Guarda los valores del modo LC0
+            Serial.println("a llenar");
+            for(int i=0;i<8;i++) {
+              //r[i]= p[5+2*i];    //Guarda los valores del modo LC0
+              voltage[i] = p[4+2*i] - 65;
+              Serial.print(voltage[i]);
+              Serial.print("\t|\t");
+              Serial.println( p[4+2*i]);
+            }
+
             return r;
         }
         //Modo LC1
@@ -29,28 +38,34 @@ char *changeValues(char *p){
         //MODO 8LC2
         else if(p[2]=='2'){
             Serial.println("entra a 2");
-            if(p[4] ==',' && (p[5]== 'S' || p[5]=='R') ){
+            if(p[4] ==',' && (p[5]== 'S' || p[5]=='R')&& p[6]==','&& p[7]>= 'A' && p[7]<='K' ){
                 if(p[5]=='S'){
                     for(int i=0;i<4;i++){ 
-                        r[i] = 'K';  
+                        r[i] = p[7];  
                     }
                     for(int i=4;i<8;i++){
                          r[i] = 'A'; 
                     }
 
-                }
+                
             }
+           
+            else {
+                    for(int i=0;i<4;i++){ 
+                        r[i] = 'A';  
+                    }
+                    for(int i=4;i<8;i++){
+                         r[i] = p[7];
             
-        }
-        else {
-              return r;
-              Serial.println("salio sin cambiar");
+                    }
+            }
          }
+      }
+      else{
+        return r;
+        }
+        
     return r;
   }
   return p;
-}
-void mode(int c){
-
-
 }

@@ -2,7 +2,9 @@
 #include <BLEServer.h>
 #include <BLEUtils.h>
 #include <BLE2902.h>
-#include "Decode.h"
+#include "asd.h"
+#include "variables.h"
+#include <SPI.h>
 BLEServer *pServer = NULL;
 BLECharacteristic * pTxCharacteristic;
 bool deviceConnected = false;
@@ -27,6 +29,22 @@ class MyServerCallbacks: public BLEServerCallbacks {
     }
 };
 
+void setPot(){ 
+  for(int i =0; i<4;i++){
+    digitalWrite(15, LOW);
+    SPI.transfer(i);
+    SPI.transfer(voltage[i]*32);
+    digitalWrite(15, HIGH);
+    Serial.println(voltage[i]*32);
+  }
+  for(int i =4; i<8;i++){
+  digitalWrite(16, LOW);
+  SPI.transfer(i-4);
+  SPI.transfer(voltage[i]*32);
+  digitalWrite(16, HIGH);
+  }
+}
+
 class MyCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic *pCharacteristic) {
       std::string rxValue = pCharacteristic->getValue();
@@ -40,18 +58,25 @@ class MyCallbacks: public BLECharacteristicCallbacks {
         
         }
         dataRecieved = &aux[0];
-        dataDecoded = changeValues(dataRecieved);
+       dataDecoded = changeValues(dataRecieved);
         Serial.print("\tData Decoded: ");
         Serial.println(dataDecoded);
-        Serial.println("*********");
+        Serial.println("*********"); 
+        setPot();
       }
     }
 };
 
+int timing = 0;
 
 void setup() {
   Serial.begin(115200);
-
+  SPI.setFrequency(4000000);
+  SPI.begin(18,19,23,5);
+  pinMode(15,OUTPUT);
+  pinMode(16,OUTPUT);
+  pinMode(2,OUTPUT);
+ 
   // Create the BLE Device
   BLEDevice::init("8 CANALES");
 
@@ -83,10 +108,20 @@ void setup() {
   // Start advertising
   pServer->getAdvertising()->start();
   Serial.println("Waiting a client connection to notify...");
+  timing = millis();
 }
 
 void loop() {
-
+  
+  if( sineWave_step> 360 ){
+      sineWave_step=0;
+      }
+    sineWave_step ++;
+    //dacWrite(25,100);
+    //dacWrite(25,SineValues[sineWave_step]);
+    dacWrite(25, 128 + int(128*sin(sineWave_step*PI/180)) );
+    
+    
     if (deviceConnected) {
         pTxCharacteristic->setValue(&txValue, 1);
         pTxCharacteristic->notify();
@@ -107,3 +142,6 @@ void loop() {
         oldDeviceConnected = deviceConnected;
     }
 }
+
+
+
