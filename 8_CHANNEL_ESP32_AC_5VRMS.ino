@@ -29,21 +29,7 @@ class MyServerCallbacks: public BLEServerCallbacks {
     }
 };
 
-void setPot(){ 
-  for(int i =0; i<4;i++){
-    digitalWrite(15, LOW);
-    SPI.transfer(i);
-    SPI.transfer(voltage[i]*32);
-    digitalWrite(15, HIGH);
-    Serial.println(voltage[i]*32);
-  }
-  for(int i =4; i<8;i++){
-  digitalWrite(16, LOW);
-  SPI.transfer(i-4);
-  SPI.transfer(voltage[i]*32);
-  digitalWrite(16, HIGH);
-  }
-}
+
 
 class MyCallbacks: public BLECharacteristicCallbacks {
     void onWrite(BLECharacteristic *pCharacteristic) {
@@ -58,11 +44,11 @@ class MyCallbacks: public BLECharacteristicCallbacks {
         
         }
         dataRecieved = &aux[0];
-       dataDecoded = changeValues(dataRecieved);
+        dataDecoded = changeValues(dataRecieved);
         Serial.print("\tData Decoded: ");
         Serial.println(dataDecoded);
         Serial.println("*********"); 
-        setPot();
+        setPot(voltage);
       }
     }
 };
@@ -76,7 +62,8 @@ void setup() {
   pinMode(15,OUTPUT);
   pinMode(16,OUTPUT);
   pinMode(2,OUTPUT);
- 
+  pinMode(buttonPin ,INPUT);
+  
   // Create the BLE Device
   BLEDevice::init("8 CANALES");
 
@@ -112,7 +99,10 @@ void setup() {
 }
 
 void loop() {
-  
+  if(digitalRead(buttonPin) == 1){
+    
+
+  }
   if( sineWave_step> 360 ){
       sineWave_step=0;
       }

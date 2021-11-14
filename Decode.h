@@ -1,4 +1,5 @@
 int voltage[8] = {0,0,0,0,0,0,0,0}; 
+
 char *changeValues(char *p){
     char *r;
     Serial.println("llama a funcion");
@@ -69,3 +70,4 @@ char *changeValues(char *p){
   }
   return p;
 }
+
