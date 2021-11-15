@@ -6,8 +6,8 @@
 #include "Decode.h"
 #include "Demo.h"
 #include "variables.h"
-#include <SPI.h>
 
+int buttonPin = 12;
 BLEServer *pServer = NULL;
 BLECharacteristic * pTxCharacteristic;
 bool deviceConnected = false;
