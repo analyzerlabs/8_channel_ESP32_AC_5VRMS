@@ -38,5 +38,23 @@ void setPot(int v[]){
 
 void demo(){
     int v_demo[8]={5,5,5,5,5,5,5,5};
-    setPot(v_demo);
+    for(int j=0 ;j<2 ;j++){
+      for(int i = 0; i<8 ;i++)v_demo[i]=5;
+      setPot(v_demo);
+      for(int i = 0; i<8 ;i++)v_demo[i]=0;
+      setPot(v_demo);
+    }
+
+    for(int j=0 ;j<2 ;j++){
+      for(int i = 0; i<4 ;i++)v_demo[i]=5;
+      setPot(v_demo);
+      for(int i = 4; i<8 ;i++)v_demo[i]=5;
+      setPot(v_demo);
+      for(int i = 0; i<4 ;i++)v_demo[i]=0;
+      setPot(v_demo);
+      for(int i = 4; i<8 ;i++)v_demo[i]=0;
+      setPot(v_demo);
+    }
+
+   
 }
