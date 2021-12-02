@@ -25,7 +25,7 @@ int demo_voltages[7][8] ={{ 0, 0, 0, 0,10,10,10,10},
 
 void eepromSetValues(int channel , int pos, int value){
   EEPROM.write(channel *11 + pos ,value);
-  EEPROM.commit();
+  EEPROM.commit(); 
 }
 
 int eepromReadValues(int channel , int pos){
@@ -163,11 +163,11 @@ char *changeValues(char *p){
     return r;
   }
   else if(p[0] == 'C' && p[1]== 'H'){
-      int a = p[7] - 48;
-      int b = p[8] - 48;
-      int c = p[9] - 48;
+      int a = p[8] - 48;
+      int b = p[9] - 48;
+      int c = p[10] - 48;
       int newValue = 100* a + 10 * b + c;
-      int Vref = p[5]- 48;
+      int Vref = (p[5]- 48)*10 + p[6]- 48;
       int Ch = p[2] - 48;
       pot_values[Ch][Vref] = newValue; 
       eepromSetValues(Ch,Vref,newValue);

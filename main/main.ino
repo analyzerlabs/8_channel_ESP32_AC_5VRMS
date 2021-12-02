@@ -78,7 +78,7 @@ void setup() {
   eepromInit();
   
   // Create the BLE Device
-  BLEDevice::init("8 CANALES");
+  BLEDevice::init("ECU LC DEMO 8CH");
 
   // Create the BLE Server
   pServer = BLEDevice::createServer();
